@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StoreAnalyzer AI - Clean Prototype</title>
+    <title>StoreAnalyzer AI - Complete Prototype</title>
     <style>
         * {
             margin: 0;
@@ -12,50 +12,21 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
-            color: #1d1d1f;
-            background: #fff;
-        }
-        
-        /* Typography */
-        h1 {
-            font-size: 3.5rem;
-            font-weight: 600;
-            line-height: 1.1;
-            letter-spacing: -0.02em;
-        }
-        
-        h2 {
-            font-size: 2.5rem;
-            font-weight: 600;
-            line-height: 1.2;
-            letter-spacing: -0.02em;
-        }
-        
-        h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            line-height: 1.3;
-        }
-        
-        p {
-            font-size: 1.1rem;
-            color: #86868b;
-            line-height: 1.6;
+            color: #333;
         }
         
         /* Navigation */
         .navbar {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
-            padding: 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         
         .nav-container {
@@ -64,101 +35,83 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 2rem;
+            padding: 0 2rem;
         }
         
         .logo {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #1d1d1f;
+            font-size: 1.8rem;
+            font-weight: bold;
         }
         
         .nav-links {
             display: flex;
             list-style: none;
-            gap: 2.5rem;
+            gap: 2rem;
         }
         
         .nav-links a {
-            color: #1d1d1f;
+            color: white;
             text-decoration: none;
-            font-weight: 400;
-            transition: color 0.3s ease;
+            transition: opacity 0.3s;
         }
         
         .nav-links a:hover {
-            color: #0071e3;
+            opacity: 0.8;
         }
         
         .nav-buttons {
             display: flex;
             gap: 1rem;
-            align-items: center;
         }
         
-        /* Buttons */
         .btn {
-            padding: 0.75rem 1.5rem;
+            padding: 0.5rem 1.5rem;
             border: none;
             border-radius: 25px;
             cursor: pointer;
             font-weight: 500;
-            font-size: 1rem;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
             text-decoration: none;
             display: inline-block;
             text-align: center;
         }
         
-        .btn-primary {
-            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+        .btn-outline {
+            background: transparent;
             color: white;
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
-            position: relative;
-            overflow: hidden;
+            border: 2px solid white;
         }
         
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
+        .btn-outline:hover {
+            background: white;
+            color: #667eea;
         }
         
-        .btn-primary:hover::before {
-            left: 100%;
+        .btn-primary {
+            background: #ff6b35;
+            color: white;
         }
         
         .btn-primary:hover {
-            background: linear-gradient(135deg, #e55a2b 0%, #e6841a 100%);
+            background: #e55a2b;
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
         }
         
         .btn-secondary {
-            background: transparent;
-            color: #0071e3;
-            border: 2px solid #0071e3;
-        }
-        
-        .btn-secondary:hover {
-            background: #0071e3;
+            background: #6c757d;
             color: white;
         }
         
         .btn-large {
-            padding: 1rem 2.5rem;
+            padding: 1rem 2rem;
             font-size: 1.1rem;
-            border-radius: 30px;
         }
         
-        /* Layout */
+        /* Page Container */
         .page {
             display: none;
+            min-height: 100vh;
+            padding-top: 80px;
         }
         
         .page.active {
@@ -171,707 +124,315 @@
             padding: 0 2rem;
         }
         
-        .section {
-            padding: 6rem 0;
-        }
-        
-        /* Hero Section */
+        /* Home Page Styles */
         .hero {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 8rem 0 6rem;
-            margin-top: 80px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="1" fill="white" opacity="0.05"/><circle cx="90" cy="40" r="1" fill="white" opacity="0.1"/><circle cx="10" cy="80" r="1" fill="white" opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>') repeat;
-            pointer-events: none;
-        }
-        
-        .hero h1 {
             color: white;
-        }
-        
-        .hero p {
-            color: rgba(255, 255, 255, 0.9);
+            padding: 6rem 0;
+            text-align: center;
         }
         
         .hero h1 {
+            font-size: 3.5rem;
             margin-bottom: 1.5rem;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
+            font-weight: 700;
         }
         
         .hero p {
             font-size: 1.3rem;
-            margin-bottom: 3rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+            margin-bottom: 2rem;
+            opacity: 0.9;
         }
         
-        /* Add interactive elements and micro-animations */
-        .hero-stats {
-            display: flex;
-            justify-content: center;
-            gap: 4rem;
-            margin: 3rem 0;
-        }
-        
-        .stat {
-            text-align: center;
-            padding: 1.5rem;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            transition: transform 0.3s ease;
-        }
-        
-        .stat:hover {
-            transform: translateY(-5px);
-        }
-        
-        /* Add floating elements */
-        .floating-element {
-            position: absolute;
-            opacity: 0.1;
-            animation: float 6s ease-in-out infinite;
-            pointer-events: none;
-        }
-        
-        .floating-element:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
-        .floating-element:nth-child(2) { top: 20%; right: 10%; animation-delay: 1s; }
-        .floating-element:nth-child(3) { bottom: 20%; left: 15%; animation-delay: 2s; }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            33% { transform: translateY(-20px) rotate(120deg); }
-            66% { transform: translateY(10px) rotate(240deg); }
-        }
-        
-        /* Add success indicators */
-        .success-indicator {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(52, 199, 89, 0.1);
-            color: #34c759;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            margin: 0.5rem;
-            animation: bounce 2s infinite;
-        }
-        
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-5px); }
-            60% { transform: translateY(-3px); }
-        }
-        
-        .stat {
-            text-align: center;
-        }
-        
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #ff6b35;
-            display: block;
-        }
-        
-        .stat-label {
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.8);
-        }
-        
-        /* Analyzer Form */
         .analyzer-form {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            padding: 3rem;
-            border-radius: 25px;
-            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             max-width: 600px;
-            margin: 0 auto;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .analyzer-form::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #ff6b35, #667eea, #764ba2, #ff6b35);
-            background-size: 300% 100%;
-            animation: gradientMove 3s ease-in-out infinite;
-        }
-        
-        @keyframes gradientMove {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+            margin: 2rem auto;
         }
         
         .form-group {
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
         
         .form-group label {
             display: block;
-            margin-bottom: 0.75rem;
-            color: #1d1d1f;
+            margin-bottom: 0.5rem;
+            color: #333;
             font-weight: 500;
-            font-size: 1.1rem;
         }
         
         .form-group input {
             width: 100%;
-            padding: 1.25rem 1.5rem;
-            border: 2px solid #d2d2d7;
-            border-radius: 15px;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.9);
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
         }
         
         .form-group input:focus {
             outline: none;
-            border-color: #0071e3;
-            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.1);
+            border-color: #667eea;
         }
         
-        .form-benefits {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 1.5rem;
-            font-size: 0.95rem;
-            color: #86868b;
+        .features {
+            padding: 4rem 0;
+            background: #f8f9fa;
         }
         
-        /* Features Grid */
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 3rem;
-            margin-top: 4rem;
-        }
-        
-        .feature-card {
-            background: white;
-            padding: 3rem 2rem;
-            border-radius: 20px;
-            text-align: center;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, #ff6b35, #667eea, #764ba2);
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-        }
-        
-        .feature-card:hover::before {
-            transform: scaleX(1);
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-12px) scale(1.02);
-            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
-        }
-        
-        .feature-card:nth-child(1) { animation-delay: 0.1s; }
-        .feature-card:nth-child(2) { animation-delay: 0.2s; }
-        .feature-card:nth-child(3) { animation-delay: 0.3s; }
-        
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .feature-card {
-            animation: slideUp 0.6s ease forwards;
-            opacity: 0;
-        }
-        
-        .feature-icon {
-            font-size: 4rem;
-            margin-bottom: 2rem;
-            display: block;
-        }
-        
-        .feature-card h3 {
-            margin-bottom: 1.5rem;
-            color: #1d1d1f;
-        }
-        
-        .feature-card p {
-            font-size: 1.1rem;
-            line-height: 1.6;
-        }
-        
-        /* Problem Section */
-        .problems {
-            background: #f5f5f7;
-            padding: 6rem 0;
-        }
-        
-        .problems h2 {
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-        
-        .problems-subtitle {
-            text-align: center;
-            font-size: 1.3rem;
-            color: #86868b;
-            margin-bottom: 4rem;
-        }
-        
-        .problems-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            margin-bottom: 4rem;
-        }
-        
-        .problem-card {
-            background: white;
-            padding: 2.5rem;
-            border-radius: 20px;
-            text-align: center;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-        }
-        
-        .problem-icon {
-            font-size: 3.5rem;
-            margin-bottom: 1.5rem;
-            display: block;
-        }
-        
-        .problem-card h3 {
-            margin-bottom: 1rem;
-            color: #1d1d1f;
-        }
-        
-        .problem-stat {
-            font-size: 3rem;
-            font-weight: 700;
-            color: #ff3b30;
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-        
-        .problem-card p {
-            font-size: 1rem;
-        }
-        
-        /* How It Works */
-        .how-it-works {
-            padding: 6rem 0;
-            background: white;
-        }
-        
-        .how-it-works h2 {
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-        
-        .how-it-works-subtitle {
-            text-align: center;
-            font-size: 1.3rem;
-            color: #86868b;
-            margin-bottom: 4rem;
-        }
-        
-        .steps-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-            margin-bottom: 4rem;
-        }
-        
-        .step {
-            text-align: center;
-        }
-        
-        .step-number {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 2rem;
-            color: white;
-            font-size: 1.8rem;
-            font-weight: 600;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .step-number::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-            transform: rotate(45deg);
-            animation: shimmer 2s infinite;
-        }
-        
-        @keyframes shimmer {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-        }
-        
-        .step h4 {
-            margin-bottom: 1rem;
-            color: #1d1d1f;
-            font-size: 1.3rem;
-        }
-        
-        .step p {
-            font-size: 1rem;
-        }
-        
-        /* Platform Cards */
-        .platforms {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
             margin-top: 3rem;
         }
         
-        .platform-card {
+        .feature-card {
             background: white;
-            padding: 3rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-        }
-        
-        .platform-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        
-        .platform-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 1.5rem;
-        }
-        
-        .shopify-icon { background: #96bf48; }
-        .wix-icon { background: #0c6efc; }
-        
-        .platform-card h3 {
-            color: #1d1d1f;
-            margin-bottom: 0.5rem;
-        }
-        
-        .platform-card ul {
-            list-style: none;
-            margin-top: 1rem;
-        }
-        
-        .platform-card li {
-            padding: 0.75rem 0;
-            color: #86868b;
-            border-bottom: 1px solid #f5f5f7;
-            font-size: 1rem;
-        }
-        
-        .platform-card li:last-child {
-            border-bottom: none;
-        }
-        
-        .platform-card li:before {
-            content: "✓";
-            color: #34c759;
-            font-weight: 700;
-            margin-right: 1rem;
-        }
-        
-        /* Pricing Section */
-        .pricing {
-            background: #f5f5f7;
-            padding: 6rem 0;
-        }
-        
-        .pricing h2 {
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
             margin-bottom: 1rem;
         }
         
-        .pricing-subtitle {
+        .testimonials {
+            padding: 4rem 0;
+        }
+        
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .testimonial {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .testimonial-content {
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+        
+        .testimonial-author {
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        /* Pricing Styles */
+        .pricing-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 0;
             text-align: center;
-            font-size: 1.3rem;
-            color: #86868b;
-            margin-bottom: 4rem;
         }
         
         .pricing-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
-            max-width: 1000px;
-            margin: 0 auto;
+            margin-top: 3rem;
         }
         
         .pricing-card {
             background: white;
-            border-radius: 20px;
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
         }
         
         .pricing-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-10px);
         }
         
         .pricing-card.featured {
             transform: scale(1.05);
-            box-shadow: 0 25px 80px rgba(255, 107, 53, 0.3);
-            border: 2px solid #ff6b35;
-            position: relative;
-        }
-        
-        .pricing-card.featured::before {
-            content: '🔥 MOST POPULAR';
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, #ff6b35, #f7931e);
-            color: white;
-            padding: 0.5rem 1.5rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+            border: 3px solid #ff6b35;
         }
         
         .pricing-header {
-            padding: 2.5rem 2rem 2rem;
+            padding: 2rem;
             text-align: center;
+            background: #f8f9fa;
         }
         
         .pricing-card.featured .pricing-header {
-            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            background: linear-gradient(135deg, #ff6b35 0%, #e55a2b 100%);
             color: white;
         }
         
-        .pricing-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-        
-        .pricing-subtitle-card {
-            font-size: 1rem;
-            margin-bottom: 2rem;
-            opacity: 0.8;
-        }
-        
         .price {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-        
-        .price-period {
-            font-size: 1.1rem;
-            opacity: 0.7;
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 1rem 0;
         }
         
         .pricing-features {
-            padding: 0 2rem 2.5rem;
+            padding: 2rem;
         }
         
         .pricing-features ul {
             list-style: none;
-            margin-bottom: 2rem;
         }
         
         .pricing-features li {
-            padding: 0.75rem 0;
-            border-bottom: 1px solid #f5f5f7;
-            color: #86868b;
-        }
-        
-        .pricing-features li:last-child {
-            border-bottom: none;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f0f0f0;
         }
         
         .pricing-features li:before {
             content: "✓";
-            color: #34c759;
-            font-weight: 700;
-            margin-right: 1rem;
+            color: #28a745;
+            font-weight: bold;
+            margin-right: 0.5rem;
         }
         
-        /* Login Form */
-        .login-section {
-            padding: 8rem 0;
-            background: #f5f5f7;
-            min-height: 100vh;
+        /* About Page Styles */
+        .about-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+        
+        .about-content {
+            padding: 4rem 0;
+        }
+        
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 1.5rem;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        /* Login Styles */
+        .login-container {
+            min-height: 80vh;
             display: flex;
             align-items: center;
+            justify-content: center;
         }
         
         .login-form {
             background: white;
-            padding: 4rem 3rem;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             width: 100%;
             max-width: 400px;
-            margin: 0 auto;
         }
         
         .login-form h2 {
             text-align: center;
             margin-bottom: 2rem;
-            font-size: 2rem;
+            color: #333;
         }
         
-        /* Analysis Results */
-        .analysis-section {
-            background: #f5f5f7;
-            padding: 6rem 0;
-            margin-top: 80px;
+        .form-divider {
+            text-align: center;
+            margin: 1.5rem 0;
+            color: #666;
+        }
+        
+        .social-login {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .social-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .social-btn:hover {
+            border-color: #667eea;
+        }
+        
+        /* Analysis Results (from previous wireframe) */
+        .analysis-container {
+            padding: 2rem 0;
         }
         
         .analysis-header {
             background: white;
-            border-radius: 20px;
-            padding: 3rem;
-            margin-bottom: 3rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-        }
-        
-        .analysis-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .analysis-metrics {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-        
-        .metric-card {
-            text-align: center;
-            padding: 1.5rem;
-            background: #f5f5f7;
-            border-radius: 15px;
-        }
-        
-        .metric-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #ff3b30;
-            display: block;
-        }
-        
-        .metric-label {
-            font-size: 0.95rem;
-            color: #86868b;
-            margin-top: 0.5rem;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         
         .main-content {
             display: grid;
             grid-template-columns: 1fr 350px;
-            gap: 3rem;
+            gap: 2rem;
         }
         
         .analysis-results {
             background: white;
-            border-radius: 20px;
-            padding: 3rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         
         .sidebar {
             background: white;
-            border-radius: 20px;
-            padding: 2.5rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             height: fit-content;
         }
         
         .score-widget {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 2.5rem;
-            border-radius: 20px;
+            padding: 2rem;
+            border-radius: 15px;
             text-align: center;
             margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .score-widget::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 50%);
-            animation: pulse 4s ease-in-out infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(0.8) rotate(0deg); opacity: 0.5; }
-            50% { transform: scale(1.2) rotate(180deg); opacity: 0.2; }
         }
         
         .score-circle {
@@ -879,52 +440,41 @@
             height: 100px;
             border: 4px solid white;
             border-radius: 50%;
-            margin: 0 auto 1.5rem;
+            margin: 0 auto 1rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5rem;
-            font-weight: 700;
+            font-size: 2rem;
+            font-weight: bold;
         }
         
         .issue-card {
             background: white;
-            border: 1px solid #d2d2d7;
-            border-radius: 15px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            transition: box-shadow 0.3s ease;
-        }
-        
-        .issue-card:hover {
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
         
         .issue-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 1.5rem;
-        }
-        
-        .issue-badges {
-            display: flex;
-            gap: 0.5rem;
+            margin-bottom: 1rem;
         }
         
         .badge {
-            padding: 0.4rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
         
-        .badge-high { background: #ffebee; color: #d32f2f; }
-        .badge-medium { background: #fff3e0; color: #ef6c00; }
-        .badge-low { background: #e8f5e8; color: #2e7d32; }
-        .badge-easy { background: #e3f2fd; color: #1976d2; }
+        .badge-high { background: #fee2e2; color: #dc2626; }
+        .badge-medium { background: #fef3c7; color: #d97706; }
+        .badge-easy { background: #e0e7ff; color: #4338ca; }
         
         /* Responsive Design */
         @media (max-width: 768px) {
@@ -932,24 +482,13 @@
                 display: none;
             }
             
-            h1 {
+            .hero h1 {
                 font-size: 2.5rem;
             }
             
-            h2 {
-                font-size: 2rem;
-            }
-            
-            .hero-stats {
-                flex-direction: column;
-                gap: 2rem;
-            }
-            
             .features-grid,
-            .problems-grid,
-            .steps-grid,
             .pricing-grid,
-            .platforms {
+            .testimonial-grid {
                 grid-template-columns: 1fr;
             }
             
@@ -957,12 +496,12 @@
                 grid-template-columns: 1fr;
             }
             
-            .container {
-                padding: 0 1rem;
+            .about-grid {
+                grid-template-columns: 1fr;
             }
             
-            .section {
-                padding: 4rem 0;
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -976,10 +515,10 @@
                 <li><a href="#" onclick="showPage('home')">Home</a></li>
                 <li><a href="#" onclick="showPage('pricing')">Pricing</a></li>
                 <li><a href="#" onclick="showPage('about')">About</a></li>
-                <li><a href="#" onclick="showPage('results')">Demo</a></li>
+                <li><a href="#" onclick="showPage('results')">Demo Results</a></li>
             </ul>
             <div class="nav-buttons">
-                <a href="#" onclick="showPage('login')" class="btn btn-secondary">Sign In</a>
+                <a href="#" onclick="showPage('login')" class="btn btn-outline">Login</a>
                 <a href="#" onclick="analyzeStore()" class="btn btn-primary">Try Free</a>
             </div>
         </div>
@@ -990,163 +529,249 @@
         <!-- Hero Section -->
         <section class="hero">
             <div class="container">
-                <h1>Turn your traffic into customers</h1>
-                <p>AI-powered analysis that reveals exactly why your Shopify or Wix store isn't converting and how to fix it.</p>
-                
-                <div class="hero-stats">
-                    <div class="stat">
-                        <span class="stat-number">247%</span>
-                        <span class="stat-label">Average conversion boost</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-number">60s</span>
-                        <span class="stat-label">Analysis time</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-number">50K+</span>
-                        <span class="stat-label">Stores analyzed</span>
-                    </div>
-                </div>
-                
-                <div class="analyzer-form">
-                    <!-- Floating decoration elements -->
-                    <div class="floating-element" style="font-size: 2rem;">📊</div>
-                    <div class="floating-element" style="font-size: 2rem;">🚀</div>
-                    <div class="floating-element" style="font-size: 2rem;">💰</div>
-                    
-                    <div class="form-group">
-                        <label for="store-url">Enter your store URL</label>
-                        <input type="url" id="store-url" placeholder="https://yourstore.shopify.com" />
-                    </div>
-                    <button class="btn btn-primary btn-large" onclick="analyzeStore()" style="width: 100%;">
-                        🎯 Get Free Analysis
-                    </button>
-                    <div class="form-benefits">
-                        <div class="success-indicator">✓ No signup required</div>
-                        <div class="success-indicator">⚡ Results in 60 seconds</div>
-                        <div class="success-indicator">🎨 Works with any theme</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Problems Section -->
-        <section class="problems">
-            <div class="container">
-                <h2>The hidden reasons your store isn't converting</h2>
-                <p class="problems-subtitle">Based on analysis of 50,000+ e-commerce stores</p>
-                
-                <div class="problems-grid">
-                    <div class="problem-card">
-                        <span class="problem-icon">🔒</span>
-                        <h3>Trust Issues</h3>
-                        <span class="problem-stat">67%</span>
-                        <p>of visitors leave because they can't find security badges, return policies, or testimonials</p>
-                    </div>
-                    
-                    <div class="problem-card">
-                        <span class="problem-icon">📱</span>
-                        <h3>Mobile Problems</h3>
-                        <span class="problem-stat">43%</span>
-                        <p>try to zoom product images on mobile, can't see details, and abandon their cart</p>
-                    </div>
-                    
-                    <div class="problem-card">
-                        <span class="problem-icon">🛒</span>
-                        <h3>Hidden Buttons</h3>
-                        <span class="problem-stat">52%</span>
-                        <p>of mobile users never scroll down to find your "Add to Cart" button</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- How It Works -->
-        <section class="how-it-works">
-            <div class="container">
-                <h2>How it works</h2>
-                <p class="how-it-works-subtitle">From analysis to results in four simple steps</p>
-                
-                <div class="steps-grid">
-                    <div class="step">
-                        <div class="step-number">1</div>
-                        <h4>Enter your URL</h4>
-                        <p>Works with any Shopify theme or Wix template. Our AI analyzes your live store.</p>
-                    </div>
-                    
-                    <div class="step">
-                        <div class="step-number">2</div>
-                        <h4>AI analysis</h4>
-                        <p>We check 47 conversion factors including trust signals, mobile UX, and checkout flow.</p>
-                    </div>
-                    
-                    <div class="step">
-                        <div class="step-number">3</div>
-                        <h4>Get priorities</h4>
-                        <p>Receive 3-5 specific issues ranked by revenue impact with exact implementation steps.</p>
-                    </div>
-                    
-                    <div class="step">
-                        <div class="step-number">4</div>
-                        <h4>Track results</h4>
-                        <p>See conversion improvements as you implement fixes. Average boost: +247%.</p>
-                    </div>
-                </div>
-                
-                <div class="platforms">
-                    <div class="platform-card">
-                        <div class="platform-header">
-                            <div class="platform-icon shopify-icon">S</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;">
+                    <div>
+                        <h1>Turn Your Shopify & Wix Traffic Into Sales</h1>
+                        <p style="font-size: 1.2rem; margin-bottom: 2rem;">Stop losing money on visitors who bounce. Our AI identifies exactly what's preventing conversions and gives you a step-by-step fix plan.</p>
+                        
+                        <div class="stats-row" style="display: flex; gap: 2rem; margin-bottom: 2rem;">
                             <div>
-                                <h3>Shopify Optimization</h3>
-                                <p style="color: #86868b;">Advanced e-commerce analysis</p>
+                                <div style="font-size: 2rem; font-weight: bold; color: #ff6b35;">247%</div>
+                                <div style="font-size: 0.9rem; opacity: 0.8;">Avg Conversion Boost</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 2rem; font-weight: bold; color: #ff6b35;">60s</div>
+                                <div style="font-size: 0.9rem; opacity: 0.8;">Analysis Time</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 2rem; font-weight: bold; color: #ff6b35;">50K+</div>
+                                <div style="font-size: 0.9rem; opacity: 0.8;">Stores Analyzed</div>
                             </div>
                         </div>
-                        <ul>
-                            <li>Theme-specific recommendations</li>
-                            <li>App conflict detection</li>
-                            <li>Checkout optimization</li>
-                            <li>Shopify Plus features</li>
+                        
+                        <div class="analyzer-form" style="text-align: left;">
+                            <div class="form-group">
+                                <label for="store-url" style="color: #333;">Enter your Shopify or Wix store URL</label>
+                                <input type="url" id="store-url" placeholder="https://yourstore.shopify.com" />
+                            </div>
+                            <button class="btn btn-primary btn-large" onclick="analyzeStore()" style="width: 100%;">
+                                🚀 Get My Free Analysis
+                            </button>
+                            <div style="display: flex; justify-content: space-between; margin-top: 1rem; color: #666; font-size: 0.9rem;">
+                                <span>✓ No signup required</span>
+                                <span>✓ Results in 60 seconds</span>
+                                <span>✓ Works with any theme</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Visual Preview -->
+                    <div style="position: relative;">
+                        <div style="background: white; border-radius: 15px; padding: 1.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.2); transform: rotate(-2deg);">
+                            <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <div style="font-weight: bold; color: #333;">Store Analysis Complete</div>
+                                        <div style="font-size: 0.8rem; color: #666;">yourstore.shopify.com</div>
+                                    </div>
+                                    <div style="width: 60px; height: 60px; background: linear-gradient(45deg, #ff6b35, #f7931e); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.2rem;">C-</div>
+                                </div>
+                            </div>
+                            <div style="background: #fff2e0; padding: 1rem; border-radius: 8px; border-left: 4px solid #ff6b35; margin-bottom: 0.5rem;">
+                                <div style="font-size: 0.9rem; font-weight: bold; color: #333;">🚨 HIGH IMPACT: Missing Trust Signals</div>
+                                <div style="font-size: 0.8rem; color: #666;">67% of visitors leave without buying due to trust concerns</div>
+                            </div>
+                            <div style="background: #f0f8ff; padding: 1rem; border-radius: 8px; border-left: 4px solid #007bff;">
+                                <div style="font-size: 0.9rem; font-weight: bold; color: #333;">📱 MEDIUM: Mobile Image Issues</div>
+                                <div style="font-size: 0.8rem; color: #666;">43% try to zoom product images and leave</div>
+                            </div>
+                        </div>
+                        <div style="position: absolute; top: -10px; right: -10px; background: #28a745; color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.8rem; font-weight: bold;">
+                            +$3,200/month potential
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Platform Integration Section -->
+        <section style="padding: 3rem 0; background: white; border-bottom: 1px solid #eee;">
+            <div class="container">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h3 style="color: #333; margin-bottom: 1rem;">Works with all Shopify & Wix stores</h3>
+                    <div style="display: flex; justify-content: center; align-items: center; gap: 3rem; flex-wrap: wrap;">
+                        <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem 2rem; background: #f8f9fa; border-radius: 10px;">
+                            <div style="width: 40px; height: 40px; background: #96bf48; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.2rem;">S</div>
+                            <div>
+                                <div style="font-weight: bold; color: #333;">Shopify</div>
+                                <div style="font-size: 0.8rem; color: #666;">All themes & apps</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem 2rem; background: #f8f9fa; border-radius: 10px;">
+                            <div style="width: 40px; height: 40px; background: #0C6EFC; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.2rem;">W</div>
+                            <div>
+                                <div style="font-weight: bold; color: #333;">Wix</div>
+                                <div style="font-size: 0.8rem; color: #666;">E-commerce sites</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem 2rem; background: #f8f9fa; border-radius: 10px;">
+                            <div style="width: 40px; height: 40px; background: #666; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.2rem;">+</div>
+                            <div>
+                                <div style="font-weight: bold; color: #333;">Others</div>
+                                <div style="font-size: 0.8rem; color: #666;">Any online store</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Problem Visualization Section -->
+        <section style="padding: 4rem 0; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+            <div class="container">
+                <div style="text-align: center; margin-bottom: 3rem;">
+                    <h2 style="color: #333; margin-bottom: 1rem;">The Hidden Reasons Your Store Isn't Converting</h2>
+                    <p style="color: #666; font-size: 1.1rem;">Based on analysis of 50,000+ Shopify & Wix stores, here's what's actually hurting your sales:</p>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-bottom: 3rem;">
+                    <div style="background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; border-top: 4px solid #e74c3c;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🔒</div>
+                        <h3 style="color: #e74c3c; margin-bottom: 1rem;">Trust Issues</h3>
+                        <div style="font-size: 2rem; font-weight: bold; color: #e74c3c; margin-bottom: 0.5rem;">67%</div>
+                        <p style="color: #666; font-size: 0.9rem;">of visitors leave because they can't find security badges, return policies, or testimonials</p>
+                    </div>
+                    
+                    <div style="background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; border-top: 4px solid #ff9800;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">📱</div>
+                        <h3 style="color: #ff9800; margin-bottom: 1rem;">Mobile Problems</h3>
+                        <div style="font-size: 2rem; font-weight: bold; color: #ff9800; margin-bottom: 0.5rem;">43%</div>
+                        <p style="color: #666; font-size: 0.9rem;">try to zoom product images on mobile, can't see details, and abandon their cart</p>
+                    </div>
+                    
+                    <div style="background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; border-top: 4px solid #f44336;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🛒</div>
+                        <h3 style="color: #f44336; margin-bottom: 1rem;">Hidden Buttons</h3>
+                        <div style="font-size: 2rem; font-weight: bold; color: #f44336; margin-bottom: 0.5rem;">52%</div>
+                        <p style="color: #666; font-size: 0.9rem;">of mobile users never scroll down to find your "Add to Cart" button</p>
+                    </div>
+                </div>
+                
+                <div style="background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center;">
+                    <h3 style="color: #333; margin-bottom: 1rem;">The Real Cost of These Issues</h3>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem;">
+                        <div>
+                            <div style="font-size: 1.8rem; font-weight: bold; color: #e74c3c;">$2,840</div>
+                            <div style="color: #666; font-size: 0.9rem;">Lost revenue per month</div>
+                            <div style="font-size: 0.8rem; color: #999;">(1,000 visitors × 2% missed conversions × $142 AOV)</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 1.8rem; font-weight: bold; color: #e74c3c;">73%</div>
+                            <div style="color: #666; font-size: 0.9rem;">Bounce rate average</div>
+                            <div style="font-size: 0.8rem; color: #999;">Industry average is 45%</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 1.8rem; font-weight: bold; color: #e74c3c;">15 sec</div>
+                            <div style="color: #666; font-size: 0.9rem;">Time before visitors leave</div>
+                            <div style="font-size: 0.8rem; color: #999;">Not enough time to build trust</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 1.8rem; font-weight: bold; color: #28a745;">247%</div>
+                            <div style="color: #666; font-size: 0.9rem;">Potential improvement</div>
+                            <div style="font-size: 0.8rem; color: #999;">When issues are fixed properly</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works with Shopify/Wix -->
+        <section style="padding: 4rem 0; background: white;">
+            <div class="container">
+                <div style="text-align: center; margin-bottom: 3rem;">
+                    <h2 style="color: #333; margin-bottom: 1rem;">How Our AI Analyzes Your Shopify or Wix Store</h2>
+                    <p style="color: #666; font-size: 1.1rem;">Unlike generic website analyzers, we understand e-commerce psychology and platform-specific issues</p>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem;">
+                    <div style="text-align: center;">
+                        <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 1.5rem; font-weight: bold;">1</div>
+                        <h4 style="margin-bottom: 1rem;">Paste Your URL</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Works with any Shopify theme or Wix template. Our crawler analyzes your live store in real-time.</p>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 1.5rem; font-weight: bold;">2</div>
+                        <h4 style="margin-bottom: 1rem;">AI Deep Analysis</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Checks 47 conversion factors: trust signals, mobile UX, checkout flow, product presentation, and more.</p>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #28a745 0%, #20c997 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 1.5rem; font-weight: bold;">3</div>
+                        <h4 style="margin-bottom: 1rem;">Prioritized Issues</h4>
+                        <p style="color: #666; font-size: 0.9rem;">Get 3-5 specific problems ranked by revenue impact, with exact implementation steps.</p>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #6f42c1 0%, #6610f2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-size: 1.5rem; font-weight: bold;">4</div>
+                        <h4 style="margin-bottom: 1rem;">Track Results</h4>
+                        <p style="color: #666; font-size: 0.9rem;">See conversion rate improvements as you implement each fix. Average boost: +247%</p>
+                    </div>
+                </div>
+                
+                <!-- Platform-specific benefits -->
+                <div style="margin-top: 3rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div style="background: #f8f9fa; padding: 2rem; border-radius: 15px; border-left: 4px solid #96bf48;">
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                            <div style="width: 40px; height: 40px; background: #96bf48; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">S</div>
+                            <h3>Shopify Store Optimization</h3>
+                        </div>
+                        <ul style="color: #666; line-height: 1.8;">
+                            <li>✓ Theme-specific recommendations (Dawn, Debut, Brooklyn, etc.)</li>
+                            <li>✓ App conflict detection and solutions</li>
+                            <li>✓ Checkout customization suggestions</li>
+                            <li>✓ Shopify Plus advanced features analysis</li>
                         </ul>
                     </div>
                     
-                    <div class="platform-card">
-                        <div class="platform-header">
-                            <div class="platform-icon wix-icon">W</div>
-                            <div>
-                                <h3>Wix Enhancement</h3>
-                                <p style="color: #86868b;">Complete store analysis</p>
-                            </div>
+                    <div style="background: #f8f9fa; padding: 2rem; border-radius: 15px; border-left: 4px solid #0C6EFC;">
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                            <div style="width: 40px; height: 40px; background: #0C6EFC; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">W</div>
+                            <h3>Wix E-commerce Enhancement</h3>
                         </div>
-                        <ul>
-                            <li>Editor X optimization</li>
-                            <li>Mobile-responsive fixes</li>
-                            <li>Wix Stores configuration</li>
-                            <li>Payment optimization</li>
+                        <ul style="color: #666; line-height: 1.8;">
+                            <li>✓ Wix Editor vs. Editor X optimization tips</li>
+                            <li>✓ Mobile-responsive design improvements</li>
+                            <li>✓ Wix Stores app configuration advice</li>
+                            <li>✓ Payment gateway optimization</li>
                         </ul>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Features -->
-        <section class="section" style="background: #f5f5f7;">
+        <!-- Social Proof -->
+        <section class="testimonials">
             <div class="container">
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <span class="feature-icon">🎯</span>
-                        <h3>Pinpoint accuracy</h3>
-                        <p>Our AI identifies the exact issues preventing conversions, not generic website problems.</p>
+                <h2 style="text-align: center; margin-bottom: 3rem;">Success Stories</h2>
+                <div class="testimonial-grid">
+                    <div class="testimonial">
+                        <div class="testimonial-content">
+                            "Increased my conversion rate from 0.8% to 2.4% in just 3 weeks by following the recommendations. The trust signals fix alone made a huge difference."
+                        </div>
+                        <div class="testimonial-author">Sarah Chen - Handmade Jewelry Store</div>
                     </div>
-                    <div class="feature-card">
-                        <span class="feature-icon">⚡</span>
-                        <h3>Instant results</h3>
-                        <p>Get actionable insights in 60 seconds, not weeks of waiting for consultant reports.</p>
+                    <div class="testimonial">
+                        <div class="testimonial-content">
+                            "Finally got clear, specific advice instead of generic 'improve your photos' suggestions. The mobile fixes were game-changing for my traffic."
+                        </div>
+                        <div class="testimonial-author">Mike Rodriguez - Electronics Store</div>
                     </div>
-                    <div class="feature-card">
-                        <span class="feature-icon">📊</span>
-                        <h3>Prioritized fixes</h3>
-                        <p>No overwhelming lists. Just 3-5 high-impact changes ranked by revenue potential.</p>
+                    <div class="testimonial">
+                        <div class="testimonial-content">
+                            "Saved me from spending $500 on Facebook ads when the real problem was my checkout button placement. ROI was immediate."
+                        </div>
+                        <div class="testimonial-author">Lisa Park - Fashion Boutique</div>
                     </div>
                 </div>
             </div>
@@ -1155,13 +780,221 @@
 
     <!-- Pricing Page -->
     <div id="pricing" class="page">
-        <section class="pricing">
-            <div class="container" style="padding-top: 8rem;">
-                <h2>Simple pricing</h2>
-                <p class="pricing-subtitle">Choose the plan that fits your store</p>
-                
+        <section class="pricing-hero">
+            <div class="container">
+                <h1>Simple, Transparent Pricing</h1>
+                <p>Choose the plan that fits your store's growth stage</p>
+            </div>
+        </section>
+        
+        <section style="padding: 4rem 0;">
+            <div class="container">
                 <div class="pricing-grid">
                     <div class="pricing-card">
                         <div class="pricing-header">
-                            <div class="pricing-title">Free Analysis</div>
-                            <div class="pricing-subtitle-card">Perfect for trying us out</div
+                            <h3>Free Analysis</h3>
+                            <div class="price">$0</div>
+                            <p>Perfect for trying us out</p>
+                        </div>
+                        <div class="pricing-features">
+                            <ul>
+                                <li>One-time store analysis</li>
+                                <li>Top 3 priority issues</li>
+                                <li>Basic recommendations</li>
+                                <li>Email report</li>
+                            </ul>
+                            <button class="btn btn-secondary btn-large" style="width: 100%; margin-top: 1rem;">Get Started</button>
+                        </div>
+                    </div>
+                    
+                    <div class="pricing-card featured">
+                        <div class="pricing-header">
+                            <h3>Growth Plan</h3>
+                            <div class="price">$39<span style="font-size: 1rem;">/month</span></div>
+                            <p>For serious store owners</p>
+                        </div>
+                        <div class="pricing-features">
+                            <ul>
+                                <li>Weekly store monitoring</li>
+                                <li>Detailed analysis reports</li>
+                                <li>Implementation guides</li>
+                                <li>A/B testing suggestions</li>
+                                <li>Competitor comparisons</li>
+                                <li>Priority email support</li>
+                            </ul>
+                            <button class="btn btn-primary btn-large" style="width: 100%; margin-top: 1rem;">Start Free Trial</button>
+                        </div>
+                    </div>
+                    
+                    <div class="pricing-card">
+                        <div class="pricing-header">
+                            <h3>Agency Plan</h3>
+                            <div class="price">$99<span style="font-size: 1rem;">/month</span></div>
+                            <p>For agencies & consultants</p>
+                        </div>
+                        <div class="pricing-features">
+                            <ul>
+                                <li>Unlimited store analyses</li>
+                                <li>White-label reports</li>
+                                <li>Client dashboard access</li>
+                                <li>API integration</li>
+                                <li>Custom branding</li>
+                                <li>Phone support</li>
+                            </ul>
+                            <button class="btn btn-secondary btn-large" style="width: 100%; margin-top: 1rem;">Contact Sales</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- About Page -->
+    <div id="about" class="page">
+        <section class="about-hero">
+            <div class="container">
+                <h1>We Solve Real E-commerce Problems</h1>
+                <p>Built by entrepreneurs who know the frustration of low-converting stores</p>
+            </div>
+        </section>
+        
+        <section class="about-content">
+            <div class="container">
+                <div class="about-grid">
+                    <div>
+                        <h2>The Problem We Solve</h2>
+                        <p style="margin-bottom: 1rem;">After analyzing 50+ Reddit threads from struggling store owners, we discovered the same patterns: entrepreneurs getting traffic but no sales, overwhelmed by conflicting advice, and unable to identify their actual conversion blockers.</p>
+                        <p style="margin-bottom: 1rem;">Existing tools either show you data without solutions (heatmaps) or are too expensive for new stores (consultants at $150+/hour).</p>
+                        <p>We built StoreAnalyzer AI to bridge that gap with instant, actionable, prioritized recommendations at an affordable price.</p>
+                    </div>
+                    <div style="background: #f8f9fa; padding: 2rem; border-radius: 10px;">
+                        <h3 style="margin-bottom: 1rem;">Our Background</h3>
+                        <ul style="line-height: 2;">
+                            <li>🚀 Built and sold 3 e-commerce stores</li>
+                            <li>📊 Analyzed 50,000+ store conversion patterns</li>
+                            <li>🎯 Specialized in conversion rate optimization</li>
+                            <li>💡 Featured in Shopify Partner Directory</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">50,000+</div>
+                        <div>Stores Analyzed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">247%</div>
+                        <div>Avg Conversion Lift</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">15 min</div>
+                        <div>Avg Fix Time</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">98%</div>
+                        <div>Customer Satisfaction</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Login Page -->
+    <div id="login" class="page">
+        <div class="login-container">
+            <div class="container">
+                <div class="login-form">
+                    <h2>Welcome Back</h2>
+                    
+                    <div class="social-login">
+                        <button class="social-btn">📧 Google</button>
+                        <button class="social-btn">🔷 Facebook</button>
+                    </div>
+                    
+                    <div class="form-divider">or continue with email</div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="your@email.com" />
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" placeholder="••••••••" />
+                    </div>
+                    
+                    <button class="btn btn-primary btn-large" style="width: 100%; margin-bottom: 1rem;">Log In</button>
+                    
+                    <p style="text-align: center; color: #666;">
+                        Don't have an account? <a href="#" style="color: #667eea;">Sign up free</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analysis Results Page -->
+    <div id="results" class="page">
+        <div class="analysis-container">
+            <div class="container">
+                <div class="analysis-header">
+                    <h1>Analysis Complete: myawesomestore.com</h1>
+                    <p style="color: #666; margin-top: 0.5rem;">Shopify Store • Electronics Category • Analyzed March 15, 2024</p>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 1.5rem;">
+                        <div style="text-align: center; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #e74c3c;">1,247</div>
+                            <div style="font-size: 0.9rem; color: #666;">Monthly Visitors</div>
+                        </div>
+                        <div style="text-align: center; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #e74c3c;">0.8%</div>
+                            <div style="font-size: 0.9rem; color: #666;">Conversion Rate</div>
+                        </div>
+                        <div style="text-align: center; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #e74c3c;">73%</div>
+                            <div style="font-size: 0.9rem; color: #666;">Bounce Rate</div>
+                        </div>
+                        <div style="text-align: center; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #e74c3c;">$42</div>
+                            <div style="font-size: 0.9rem; color: #666;">Avg Order Value</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="main-content">
+                    <div class="analysis-results">
+                        <h2 style="margin-bottom: 2rem;">Priority Issues to Fix</h2>
+                        
+                        <div class="issue-card">
+                            <div class="issue-header">
+                                <div>
+                                    <h3>❌ Missing Trust Signals Above the Fold</h3>
+                                    <p style="color: #666; font-size: 0.9rem;">Critical conversion blocker identified</p>
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <span class="badge badge-high">High Impact</span>
+                                    <span class="badge badge-easy">Easy Fix</span>
+                                </div>
+                            </div>
+                            <p style="color: #666; margin-bottom: 1rem;">
+                                Your homepage lacks visible trust indicators like security badges, return policy, or customer testimonials above the fold. 67% of first-time visitors leave within 10 seconds.
+                            </p>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0;">
+                                <div style="border: 2px dashed #ddd; padding: 1rem; text-align: center; background: #f8f9fa;">
+                                    BEFORE: No trust signals visible
+                                </div>
+                                <div style="border: 2px dashed #ddd; padding: 1rem; text-align: center; background: #f8f9fa;">
+                                    AFTER: Trust badges and guarantee visible
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 1rem;">
+                                <button class="btn btn-primary">📝 Generate Trust Badge Code</button>
+                                <button class="btn btn-secondary">👀 See Examples</button>
+                            </div>
+                        </div>
+                        
+                        <div class="issue-card">
+                            <div class="issue-header">
+                                <div>
+                                    <h3>📱 Poor Mobile Product Image Experience</h3>
+                                    <p style="color: #666; font-size: 0.9rem;">Mobile users can't see product details clearly</p>
