@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StoreAnalyzer AI - Clean Prototype</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #1d1d1f;
+            background: #fff;
+        }
+        
+        /* Typography */
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 600;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+        
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+        
+        p {
+            font-size: 1.1rem;
+            color: #86868b;
+            line-height: 1.6;
+        }
+        
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 0;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+        
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #1d1d1f;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+        
+        .nav-links a {
+            color: #1d1d1f;
+            text-decoration: none;
+            font-weight: 400;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: #0071e3;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #e55a2b 0%, #e6841a 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: #0071e3;
+            border: 2px solid #0071e3;
+        }
+        
+        .btn-secondary:hover {
+            background: #0071e3;
+            color: white;
+        }
+        
+        .btn-large {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            border-radius: 30px;
+        }
+        
+        /* Layout */
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .section {
+            padding: 6rem 0;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 8rem 0 6rem;
+            margin-top: 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="1" fill="white" opacity="0.05"/><circle cx="90" cy="40" r="1" fill="white" opacity="0.1"/><circle cx="10" cy="80" r="1" fill="white" opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>') repeat;
+            pointer-events: none;
+        }
+        
+        .hero h1 {
+            color: white;
+        }
+        
+        .hero p {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .hero h1 {
+            margin-bottom: 1.5rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Add interactive elements and micro-animations */
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin: 3rem 0;
+        }
+        
+        .stat {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat:hover {
+            transform: translateY(-5px);
+        }
+        
+        /* Add floating elements */
+        .floating-element {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        .floating-element:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .floating-element:nth-child(2) { top: 20%; right: 10%; animation-delay: 1s; }
+        .floating-element:nth-child(3) { bottom: 20%; left: 15%; animation-delay: 2s; }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(120deg); }
+            66% { transform: translateY(10px) rotate(240deg); }
+        }
+        
+        /* Add success indicators */
+        .success-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(52, 199, 89, 0.1);
+            color: #34c759;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin: 0.5rem;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-5px); }
+            60% { transform: translateY(-3px); }
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ff6b35;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        /* Analyzer Form */
+        .analyzer-form {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 3rem;
+            border-radius: 25px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
+            max-width: 600px;
+            margin: 0 auto;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .analyzer-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b35, #667eea, #764ba2, #ff6b35);
+            background-size: 300% 100%;
+            animation: gradientMove 3s ease-in-out infinite;
+        }
+        
+        @keyframes gradientMove {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .form-group {
+            margin-bottom: 2rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.75rem;
+            color: #1d1d1f;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 1.25rem 1.5rem;
+            border: 2px solid #d2d2d7;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #0071e3;
+            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.1);
+        }
+        
+        .form-benefits {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+            font-size: 0.95rem;
+            color: #86868b;
+        }
+        
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b35, #667eea, #764ba2);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
+        }
+        
+        .feature-card:nth-child(1) { animation-delay: 0.1s; }
+        .feature-card:nth-child(2) { animation-delay: 0.2s; }
+        .feature-card:nth-child(3) { animation-delay: 0.3s; }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .feature-card {
+            animation: slideUp 0.6s ease forwards;
+            opacity: 0;
+        }
+        
+        .feature-icon {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            display: block;
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 1.5rem;
+            color: #1d1d1f;
+        }
+        
+        .feature-card p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        /* Problem Section */
+        .problems {
+            background: #f5f5f7;
+            padding: 6rem 0;
+        }
+        
+        .problems h2 {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        
+        .problems-subtitle {
+            text-align: center;
+            font-size: 1.3rem;
+            color: #86868b;
+            margin-bottom: 4rem;
+        }
+        
+        .problems-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        .problem-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        }
+        
+        .problem-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+        
+        .problem-card h3 {
+            margin-bottom: 1rem;
+            color: #1d1d1f;
+        }
+        
+        .problem-stat {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #ff3b30;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .problem-card p {
+            font-size: 1rem;
+        }
+        
+        /* How It Works */
+        .how-it-works {
+            padding: 6rem 0;
+            background: white;
+        }
+        
+        .how-it-works h2 {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        
+        .how-it-works-subtitle {
+            text-align: center;
+            font-size: 1.3rem;
+            color: #86868b;
+            margin-bottom: 4rem;
+        }
+        
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        .step {
+            text-align: center;
+        }
+        
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .step-number::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        
+        .step h4 {
+            margin-bottom: 1rem;
+            color: #1d1d1f;
+            font-size: 1.3rem;
+        }
+        
+        .step p {
+            font-size: 1rem;
+        }
+        
+        /* Platform Cards */
+        .platforms {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .platform-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .platform-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .platform-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .shopify-icon { background: #96bf48; }
+        .wix-icon { background: #0c6efc; }
+        
+        .platform-card h3 {
+            color: #1d1d1f;
+            margin-bottom: 0.5rem;
+        }
+        
+        .platform-card ul {
+            list-style: none;
+            margin-top: 1rem;
+        }
+        
+        .platform-card li {
+            padding: 0.75rem 0;
+            color: #86868b;
+            border-bottom: 1px solid #f5f5f7;
+            font-size: 1rem;
+        }
+        
+        .platform-card li:last-child {
+            border-bottom: none;
+        }
+        
+        .platform-card li:before {
+            content: "✓";
+            color: #34c759;
+            font-weight: 700;
+            margin-right: 1rem;
+        }
+        
+        /* Pricing Section */
+        .pricing {
+            background: #f5f5f7;
+            padding: 6rem 0;
+        }
+        
+        .pricing h2 {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        
+        .pricing-subtitle {
+            text-align: center;
+            font-size: 1.3rem;
+            color: #86868b;
+            margin-bottom: 4rem;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .pricing-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .pricing-card.featured {
+            transform: scale(1.05);
+            box-shadow: 0 25px 80px rgba(255, 107, 53, 0.3);
+            border: 2px solid #ff6b35;
+            position: relative;
+        }
+        
+        .pricing-card.featured::before {
+            content: '🔥 MOST POPULAR';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+        }
+        
+        .pricing-header {
+            padding: 2.5rem 2rem 2rem;
+            text-align: center;
+        }
+        
+        .pricing-card.featured .pricing-header {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+        }
+        
+        .pricing-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .pricing-subtitle-card {
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+        }
+        
+        .price {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .price-period {
+            font-size: 1.1rem;
+            opacity: 0.7;
+        }
+        
+        .pricing-features {
+            padding: 0 2rem 2.5rem;
+        }
+        
+        .pricing-features ul {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+        
+        .pricing-features li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f5f5f7;
+            color: #86868b;
+        }
+        
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+        
+        .pricing-features li:before {
+            content: "✓";
+            color: #34c759;
+            font-weight: 700;
+            margin-right: 1rem;
+        }
+        
+        /* Login Form */
+        .login-section {
+            padding: 8rem 0;
+            background: #f5f5f7;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .login-form {
+            background: white;
+            padding: 4rem 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .login-form h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+        
+        /* Analysis Results */
+        .analysis-section {
+            background: #f5f5f7;
+            padding: 6rem 0;
+            margin-top: 80px;
+        }
+        
+        .analysis-header {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .analysis-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .analysis-metrics {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .metric-card {
+            text-align: center;
+            padding: 1.5rem;
+            background: #f5f5f7;
+            border-radius: 15px;
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ff3b30;
+            display: block;
+        }
+        
+        .metric-label {
+            font-size: 0.95rem;
+            color: #86868b;
+            margin-top: 0.5rem;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 3rem;
+        }
+        
+        .analysis-results {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+        }
+        
+        .score-widget {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .score-widget::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 50%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(0.8) rotate(0deg); opacity: 0.5; }
+            50% { transform: scale(1.2) rotate(180deg); opacity: 0.2; }
+        }
+        
+        .score-circle {
+            width: 100px;
+            height: 100px;
+            border: 4px solid white;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        
+        .issue-card {
+            background: white;
+            border: 1px solid #d2d2d7;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: box-shadow 0.3s ease;
+        }
+        
+        .issue-card:hover {
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .issue-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+        
+        .issue-badges {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .badge {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .badge-high { background: #ffebee; color: #d32f2f; }
+        .badge-medium { background: #fff3e0; color: #ef6c00; }
+        .badge-low { background: #e8f5e8; color: #2e7d32; }
+        .badge-easy { background: #e3f2fd; color: #1976d2; }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            
+            .features-grid,
+            .problems-grid,
+            .steps-grid,
+            .pricing-grid,
+            .platforms {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .section {
+                padding: 4rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">StoreAnalyzer AI</div>
+            <ul class="nav-links">
+                <li><a href="#" onclick="showPage('home')">Home</a></li>
+                <li><a href="#" onclick="showPage('pricing')">Pricing</a></li>
+                <li><a href="#" onclick="showPage('about')">About</a></li>
+                <li><a href="#" onclick="showPage('results')">Demo</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <a href="#" onclick="showPage('login')" class="btn btn-secondary">Sign In</a>
+                <a href="#" onclick="analyzeStore()" class="btn btn-primary">Try Free</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="home" class="page active">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <h1>Turn your traffic into customers</h1>
+                <p>AI-powered analysis that reveals exactly why your Shopify or Wix store isn't converting and how to fix it.</p>
+                
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">247%</span>
+                        <span class="stat-label">Average conversion boost</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">60s</span>
+                        <span class="stat-label">Analysis time</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">50K+</span>
+                        <span class="stat-label">Stores analyzed</span>
+                    </div>
+                </div>
+                
+                <div class="analyzer-form">
+                    <!-- Floating decoration elements -->
+                    <div class="floating-element" style="font-size: 2rem;">📊</div>
+                    <div class="floating-element" style="font-size: 2rem;">🚀</div>
+                    <div class="floating-element" style="font-size: 2rem;">💰</div>
+                    
+                    <div class="form-group">
+                        <label for="store-url">Enter your store URL</label>
+                        <input type="url" id="store-url" placeholder="https://yourstore.shopify.com" />
+                    </div>
+                    <button class="btn btn-primary btn-large" onclick="analyzeStore()" style="width: 100%;">
+                        🎯 Get Free Analysis
+                    </button>
+                    <div class="form-benefits">
+                        <div class="success-indicator">✓ No signup required</div>
+                        <div class="success-indicator">⚡ Results in 60 seconds</div>
+                        <div class="success-indicator">🎨 Works with any theme</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Problems Section -->
+        <section class="problems">
+            <div class="container">
+                <h2>The hidden reasons your store isn't converting</h2>
+                <p class="problems-subtitle">Based on analysis of 50,000+ e-commerce stores</p>
+                
+                <div class="problems-grid">
+                    <div class="problem-card">
+                        <span class="problem-icon">🔒</span>
+                        <h3>Trust Issues</h3>
+                        <span class="problem-stat">67%</span>
+                        <p>of visitors leave because they can't find security badges, return policies, or testimonials</p>
+                    </div>
+                    
+                    <div class="problem-card">
+                        <span class="problem-icon">📱</span>
+                        <h3>Mobile Problems</h3>
+                        <span class="problem-stat">43%</span>
+                        <p>try to zoom product images on mobile, can't see details, and abandon their cart</p>
+                    </div>
+                    
+                    <div class="problem-card">
+                        <span class="problem-icon">🛒</span>
+                        <h3>Hidden Buttons</h3>
+                        <span class="problem-stat">52%</span>
+                        <p>of mobile users never scroll down to find your "Add to Cart" button</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works -->
+        <section class="how-it-works">
+            <div class="container">
+                <h2>How it works</h2>
+                <p class="how-it-works-subtitle">From analysis to results in four simple steps</p>
+                
+                <div class="steps-grid">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h4>Enter your URL</h4>
+                        <p>Works with any Shopify theme or Wix template. Our AI analyzes your live store.</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h4>AI analysis</h4>
+                        <p>We check 47 conversion factors including trust signals, mobile UX, and checkout flow.</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h4>Get priorities</h4>
+                        <p>Receive 3-5 specific issues ranked by revenue impact with exact implementation steps.</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h4>Track results</h4>
+                        <p>See conversion improvements as you implement fixes. Average boost: +247%.</p>
+                    </div>
+                </div>
+                
+                <div class="platforms">
+                    <div class="platform-card">
+                        <div class="platform-header">
+                            <div class="platform-icon shopify-icon">S</div>
+                            <div>
+                                <h3>Shopify Optimization</h3>
+                                <p style="color: #86868b;">Advanced e-commerce analysis</p>
+                            </div>
+                        </div>
+                        <ul>
+                            <li>Theme-specific recommendations</li>
+                            <li>App conflict detection</li>
+                            <li>Checkout optimization</li>
+                            <li>Shopify Plus features</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="platform-card">
+                        <div class="platform-header">
+                            <div class="platform-icon wix-icon">W</div>
+                            <div>
+                                <h3>Wix Enhancement</h3>
+                                <p style="color: #86868b;">Complete store analysis</p>
+                            </div>
+                        </div>
+                        <ul>
+                            <li>Editor X optimization</li>
+                            <li>Mobile-responsive fixes</li>
+                            <li>Wix Stores configuration</li>
+                            <li>Payment optimization</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features -->
+        <section class="section" style="background: #f5f5f7;">
+            <div class="container">
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <span class="feature-icon">🎯</span>
+                        <h3>Pinpoint accuracy</h3>
+                        <p>Our AI identifies the exact issues preventing conversions, not generic website problems.</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">⚡</span>
+                        <h3>Instant results</h3>
+                        <p>Get actionable insights in 60 seconds, not weeks of waiting for consultant reports.</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">📊</span>
+                        <h3>Prioritized fixes</h3>
+                        <p>No overwhelming lists. Just 3-5 high-impact changes ranked by revenue potential.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Pricing Page -->
+    <div id="pricing" class="page">
+        <section class="pricing">
+            <div class="container" style="padding-top: 8rem;">
+                <h2>Simple pricing</h2>
+                <p class="pricing-subtitle">Choose the plan that fits your store</p>
+                
+                <div class="pricing-grid">
+                    <div class="pricing-card">
+                        <div class="pricing-header">
+                            <div class="pricing-title">Free Analysis</div>
+                            <div class="pricing-subtitle-card">Perfect for trying us out</div
